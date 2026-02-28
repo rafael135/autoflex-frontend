@@ -1,10 +1,13 @@
 import './App.css'
 import { RouterProvider } from 'react-router-dom';
+import { App as AntApp } from 'antd';
 import { router } from './app/router';
 
 const App = () => {
   return (
-    <RouterProvider router={router} />
+    <AntApp>
+      <RouterProvider router={router} />
+    </AntApp>
   )
 }
 

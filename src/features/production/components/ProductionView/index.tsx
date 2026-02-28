@@ -74,6 +74,7 @@ const ProductionView = () => {
                         xs: 24, md: 12, sm: 12
                     }}
                     styles={{ content: { color: "#1e3a5f", fontWeight: 700 } }}
+                    testId="statistic-total-value"
                 />
                 <StatisticCard
                     loading={isLoading}
@@ -84,6 +85,7 @@ const ProductionView = () => {
                         xs: 24, md: 12, sm: 12
                     }}
                     styles={{ content: { color: "#1e3a5f" } }}
+                    testId="statistic-products-count"
                 />
                 <StatisticCard
                     loading={isLoading}
@@ -99,6 +101,7 @@ const ProductionView = () => {
                             color: "#1e3a5f",
                         },
                     }}
+                    testId="statistic-max-capacity"
                     colProps={{
                         xs: 24, md: 24, sm: 24
                     }}
@@ -125,6 +128,7 @@ const ProductionView = () => {
                         emptyText:
                             "Nenhum produto pode ser produzido com o estoque atual.",
                     }}
+                    data-testid="production-table"
                 />
             </Card>
         </>

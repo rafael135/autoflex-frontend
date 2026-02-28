@@ -2,7 +2,7 @@ import { Table, Space, Typography } from "antd";
 import { useRawMaterials } from "./hooks/useRawMaterials";
 import RawMaterialModal from "./components/RawMaterialModal";
 import type { RawMaterial } from "../../types";
-import { EntityListHeader, buildIdColumn, buildActionColumn } from "../../../../components/_ui";
+import { EntityListHeader, buildIdColumn, buildActionColumn, ErrorAlert } from "../../../../components/_ui";
 
 const { Text } = Typography;
 
@@ -43,6 +43,9 @@ const RawMaterialsList = () => {
         handleDelete,
         rawMaterials,
         isLoadingGetRawMaterials,
+        isErrorGetRawMaterials,
+        isErrorCreate,
+        isErrorUpdate,
         currentPage,
         setCurrentPage,
         itemsPerPage,
@@ -51,6 +54,18 @@ const RawMaterialsList = () => {
 
     return (
         <Space direction="vertical" size="middle" style={{ display: "flex" }}>
+            <ErrorAlert
+                visible={isErrorGetRawMaterials}
+                message="Erro ao carregar insumos. Tente novamente."
+            />
+            <ErrorAlert
+                visible={isErrorCreate}
+                message="Erro ao cadastrar insumo. Verifique os dados e tente novamente."
+            />
+            <ErrorAlert
+                visible={isErrorUpdate}
+                message="Erro ao atualizar insumo. Verifique os dados e tente novamente."
+            />
             <EntityListHeader
                 title="Insumos"
                 subtitle={`${rawMaterials?.totalItems ?? 0} ${
@@ -60,6 +75,7 @@ const RawMaterialsList = () => {
                 }`}
                 addLabel="Novo Insumo"
                 onAdd={openCreateModal}
+                addButtonTestId="add-raw-material-button"
             />
 
             <Table
@@ -82,6 +98,7 @@ const RawMaterialsList = () => {
                     },
                 }}
                 scroll={{ x: 500 }}
+                data-testid="raw-materials-table"
             />
 
             <RawMaterialModal

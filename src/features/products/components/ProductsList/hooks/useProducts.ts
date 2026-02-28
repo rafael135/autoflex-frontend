@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
-import { Form } from "antd";
+import { Form, App } from "antd";
 import type { Product } from "../../../types";
 import {
     useCreateProductMutation,
@@ -16,6 +16,7 @@ type RawMaterialOption = { value: number; label: string };
 const ITEMS_PER_PAGE = 20;
 
 export const useProducts = () => {
+    const { message } = App.useApp();
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
 
@@ -101,42 +102,6 @@ export const useProducts = () => {
     const [deleteProduct, { isLoading: isLoadingDeleteProduct }] =
         useDeleteProductMutation();
 
-    const onAdd = useCallback(
-        async (product: Product) => {
-            await createProduct({
-                name: product.name,
-                value: product.value,
-                materials: product.materials.map((m) => ({
-                    rawMaterialId: m.rawMaterialId,
-                    quantity: m.quantity,
-                })),
-            });
-        },
-        [createProduct],
-    );
-
-    const onEdit = useCallback(
-        async (product: Product) => {
-            await updateProduct({
-                id: product.id,
-                name: product.name,
-                value: product.value,
-                materials: product.materials.map((m) => ({
-                    rawMaterialId: m.rawMaterialId,
-                    quantity: m.quantity,
-                })),
-            });
-        },
-        [updateProduct],
-    );
-
-    const onDelete = useCallback(
-        async (id: number) => {
-            await deleteProduct(id);
-        },
-        [deleteProduct],
-    );
-
     const [form] = Form.useForm();
     const [modalOpen, setModalOpen] = useState(false);
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -194,17 +159,48 @@ export const useProducts = () => {
                             quantity: m.quantity,
                         })),
                 };
-                if (editingProduct) {
-                    await onEdit(product);
-                } else {
-                    await onAdd(product);
+                try {
+                    if (editingProduct) {
+                        await updateProduct({
+                            id: product.id,
+                            name: product.name,
+                            value: product.value,
+                            materials: product.materials.map((m) => ({
+                                rawMaterialId: m.rawMaterialId,
+                                quantity: m.quantity,
+                            })),
+                        }).unwrap();
+                        message.success("Produto atualizado com sucesso!");
+                    } else {
+                        await createProduct({
+                            name: product.name,
+                            value: product.value,
+                            materials: product.materials.map((m) => ({
+                                rawMaterialId: m.rawMaterialId,
+                                quantity: m.quantity,
+                            })),
+                        }).unwrap();
+                        message.success("Produto cadastrado com sucesso!");
+                    }
+                    closeModal();
+                } catch {
+                    // isErrorCreateProduct / isErrorUpdateProduct drive the ErrorAlert in the UI
                 }
-                closeModal();
             },
-        );
-    }, [form, editingProduct, rawMaterialOptions, onAdd, onEdit, closeModal]);
+        )
+        .catch(() => {
+            // validateFields() rejects when form is invalid — handled by Ant Design inline messages
+        });
+    }, [form, editingProduct, rawMaterialOptions, closeModal, updateProduct, message, createProduct]);
 
-    const handleDelete = useCallback((id: number) => onDelete(id), [onDelete]);
+    const handleDelete = useCallback(async (id: number) => {
+        try {
+            await deleteProduct(id).unwrap();
+            message.success("Produto excluído com sucesso!");
+        } catch {
+            message.error("Erro ao excluir produto. Tente novamente.");
+        }
+    }, [deleteProduct, message]);
 
     useEffect(() => {
         refetchProducts();

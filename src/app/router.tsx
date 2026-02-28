@@ -1,8 +1,9 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import { ProductsRoutes } from "../features/products";
 import { RawMaterialsRoutes } from "../features/rawMaterials";
 import { ProductionRoutes } from "../features/production";
+import NotFound from "../pages/NotFound";
 
 export const router = createBrowserRouter([
     {
@@ -10,18 +11,29 @@ export const router = createBrowserRouter([
         element: <MainLayout />,
         children: [
             {
-                path: "products/*",
                 index: true,
-                element: <ProductsRoutes />
+                element: <Navigate to="/products" replace />,
+            },
+            {
+                path: "products/*",
+                element: <ProductsRoutes />,
             },
             {
                 path: "rawMaterials/*",
-                element: <RawMaterialsRoutes />
+                element: <RawMaterialsRoutes />,
             },
             {
                 path: "production/*",
-                element: <ProductionRoutes />
-            }
-        ]
-    }
+                element: <ProductionRoutes />,
+            },
+            {
+                path: "*",
+                element: <NotFound />,
+            },
+        ],
+    },
+    {
+        path: "*",
+        element: <NotFound />,
+    },
 ])

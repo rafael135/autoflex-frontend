@@ -38,6 +38,7 @@ export const buildActionColumn = <T extends { id: number }>({
                 icon={<EditOutlined />}
                 size="small"
                 onClick={() => onEdit(record)}
+                data-testid="edit-button"
             />
             <Popconfirm
                 title={`Excluir ${deleteLabel}`}
@@ -46,7 +47,7 @@ export const buildActionColumn = <T extends { id: number }>({
                 okText="Sim"
                 cancelText="Não"
             >
-                <Button type="text" danger icon={<DeleteOutlined />} size="small" />
+                <Button type="text" danger icon={<DeleteOutlined />} size="small" data-testid="delete-button" />
             </Popconfirm>
         </Space>
     ),

@@ -34,7 +34,7 @@ const RawMaterialModal: FC<RawMaterialModalProps> = ({
                     label="Nome do Insumo"
                     rules={[{ required: true, message: "Informe o nome." }]}
                 >
-                    <Input placeholder="Ex: Chapa de Aço 2mm" />
+                    <Input placeholder="Ex: Chapa de Aço 2mm" data-testid="name-input" />
                 </Form.Item>
 
                 <Form.Item
@@ -53,6 +53,7 @@ const RawMaterialModal: FC<RawMaterialModalProps> = ({
                         precision={0}
                         style={{ width: "100%" }}
                         placeholder="0"
+                        data-testid="stock-quantity-input"
                     />
                 </Form.Item>
         </CrudModal>

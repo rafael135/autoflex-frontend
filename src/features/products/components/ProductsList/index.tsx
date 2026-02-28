@@ -2,7 +2,7 @@ import { Table, Tag, Space, Typography } from "antd";
 import { useProducts } from "./hooks/useProducts";
 import ProductModal from "./components/ProductModal";
 import type { Product } from "../../types";
-import { EntityListHeader, buildIdColumn, buildActionColumn } from "../../../../components/_ui";
+import { EntityListHeader, buildIdColumn, buildActionColumn, ErrorAlert } from "../../../../components/_ui";
 import { formatCurrency } from "../../../../app/utils/formatters";
 
 const { Text } = Typography;
@@ -57,6 +57,9 @@ const ProductsList = () => {
         handleDelete,
         products,
         isLoadingGetProducts,
+        isErrorGetProducts,
+        isErrorCreateProduct,
+        isErrorUpdateProduct,
         rawMaterialOptions,
         isLoadingRawMaterials,
         hasMoreRawMaterials,
@@ -70,6 +73,18 @@ const ProductsList = () => {
 
     return (
         <Space direction="vertical" size="middle" style={{ display: "flex" }}>
+            <ErrorAlert
+                visible={isErrorGetProducts}
+                message="Erro ao carregar produtos. Tente novamente."
+            />
+            <ErrorAlert
+                visible={isErrorCreateProduct}
+                message="Erro ao cadastrar produto. Verifique os dados e tente novamente."
+            />
+            <ErrorAlert
+                visible={isErrorUpdateProduct}
+                message="Erro ao atualizar produto. Verifique os dados e tente novamente."
+            />
             <EntityListHeader
                 title="Produtos"
                 subtitle={`${products?.totalItems ?? 0} ${
@@ -79,6 +94,7 @@ const ProductsList = () => {
                 }`}
                 addLabel="Novo Produto"
                 onAdd={openCreateModal}
+                addButtonTestId="add-product-button"
             />
 
             <Table
@@ -101,6 +117,7 @@ const ProductsList = () => {
                     },
                 }}
                 scroll={{ x: 700 }}
+                data-testid="products-table"
             />
 
             <ProductModal

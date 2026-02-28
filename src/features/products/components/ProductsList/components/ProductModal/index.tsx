@@ -84,7 +84,7 @@ const ProductModal: FC<ProductModalProps> = ({
                     label="Nome do Produto"
                     rules={[{ required: true, message: "Informe o nome." }]}
                 >
-                    <Input placeholder="Ex: Quadro Elétrico Industrial" />
+                    <Input placeholder="Ex: Quadro Elétrico Industrial" data-testid="name-input" />
                 </Form.Item>
 
                 <Form.Item
@@ -104,6 +104,7 @@ const ProductModal: FC<ProductModalProps> = ({
                         placeholder="0"
                         formatter={(v) => `${v}`.replace(".", ",")}
                         parser={(v) => parseFloat((v ?? "0").replace(",", "."))}
+                        data-testid="value-input"
                     />
                 </Form.Item>
 
@@ -116,7 +117,7 @@ const ProductModal: FC<ProductModalProps> = ({
                 <Form.List name="materials">
                     {(fields, { add, remove }) => (
                         <Space
-                            direction="vertical"
+                            orientation="vertical"
                             size="small"
                             style={{ display: "flex" }}
                         >
@@ -142,6 +143,7 @@ const ProductModal: FC<ProductModalProps> = ({
                                             onPopupScroll={handlePopupScroll}
                                             dropdownRender={dropdownRender}
                                             loading={isLoadingRawMaterials}
+                                            data-testid={`material-select-${name}`}
                                         />
                                     </Form.Item>
                                     <Form.Item
@@ -160,10 +162,12 @@ const ProductModal: FC<ProductModalProps> = ({
                                             step={1}
                                             placeholder="Qtd."
                                             style={{ width: "100%" }}
+                                            data-testid={`quantity-input-${name}`}
                                         />
                                     </Form.Item>
                                     <Button
                                         type="text"
+                                        data-testid={`remove-material-button-${name}`}
                                         danger
                                         icon={<MinusCircleOutlined />}
                                         onClick={() => remove(name)}
@@ -173,6 +177,7 @@ const ProductModal: FC<ProductModalProps> = ({
                             ))}
                             <Button
                                 type="dashed"
+                                data-testid="add-material-button"
                                 onClick={() => add()}
                                 icon={<PlusOutlined />}
                                 block

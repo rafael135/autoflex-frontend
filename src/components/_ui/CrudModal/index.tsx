@@ -1,4 +1,4 @@
-import { Modal, Form } from 'antd';
+import { Modal, Form, Button } from 'antd';
 import type { FormInstance } from 'antd';
 import type { ReactNode } from 'react';
 
@@ -29,11 +29,22 @@ const CrudModal = ({
     <Modal
         title={editing ? `Editar ${entityName}` : `Novo ${entityName}`}
         open={open}
-        onOk={onOk}
         onCancel={onCancel}
-        okText={editing ? 'Salvar' : 'Cadastrar'}
-        cancelText="Cancelar"
-        confirmLoading={confirmLoading}
+        footer={
+            <>
+                <Button onClick={onCancel} data-testid="modal-cancel-button">
+                    Cancelar
+                </Button>
+                <Button
+                    type="primary"
+                    onClick={onOk}
+                    loading={confirmLoading}
+                    data-testid="modal-ok-button"
+                >
+                    {editing ? 'Salvar' : 'Cadastrar'}
+                </Button>
+            </>
+        }
         style={{ maxWidth: width }}
         width="90vw"
         styles={{
@@ -46,6 +57,7 @@ const CrudModal = ({
             if (!visible) form.resetFields();
         }}
         destroyOnHidden
+        data-testid="crud-modal"
     >
         <Form form={form} layout="vertical" style={{ marginTop: 16 }}>
             {children}
