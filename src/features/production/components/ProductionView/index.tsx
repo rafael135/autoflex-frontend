@@ -53,7 +53,7 @@ const columns = [
     },
 ];
 
-export default function ProductionView() {
+const ProductionView = () => {
     const { data, isLoading, isError, topProduct } = useProduction();
 
     return (
@@ -130,3 +130,5 @@ export default function ProductionView() {
         </>
     );
 }
+
+export default ProductionView;

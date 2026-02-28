@@ -31,7 +31,7 @@ const VIEW_TITLES: Record<ActiveView, string> = {
 
 const SIDEBAR_BG = "#1e3a5f";
 
-export default function Dashboard() {
+const Dashboard = () => {
     const [activeView, setActiveView] = useState<ActiveView>("products");
     const [siderCollapsed, setSiderCollapsed] = useState(false);
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -187,3 +187,5 @@ export default function Dashboard() {
         </Layout>
     );
 }
+
+export default Dashboard;
