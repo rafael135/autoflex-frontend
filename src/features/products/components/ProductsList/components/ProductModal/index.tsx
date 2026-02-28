@@ -1,5 +1,4 @@
 import {
-    Modal,
     Form,
     Input,
     InputNumber,
@@ -15,6 +14,7 @@ import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import type { FormInstance } from "antd";
 import type { Product } from "../../../../types";
 import type { FC } from "react";
+import { CrudModal } from "../../../../../../components/_ui";
 
 const { Text } = Typography;
 
@@ -70,20 +70,15 @@ const ProductModal: FC<ProductModalProps> = ({
     );
 
     return (
-        <Modal
-            title={editingProduct ? "Editar Produto" : "Novo Produto"}
+        <CrudModal
             open={open}
+            editing={!!editingProduct}
+            entityName="Produto"
+            form={form}
             onOk={onOk}
             onCancel={onCancel}
-            okText={editingProduct ? "Salvar" : "Cadastrar"}
-            cancelText="Cancelar"
             width={600}
-            afterOpenChange={(visible) => {
-                if (!visible) form.resetFields();
-            }}
-            destroyOnHidden
         >
-            <Form form={form} layout="vertical" style={{ marginTop: 16 }}>
                 <Form.Item
                     name="name"
                     label="Nome do Produto"
@@ -158,7 +153,7 @@ const ProductModal: FC<ProductModalProps> = ({
                                                 message: "Informe a qtd.",
                                             },
                                         ]}
-                                        style={{ width: 110, marginBottom: 0 }}
+                                        style={{ width: 90, flexShrink: 0, marginBottom: 0 }}
                                     >
                                         <InputNumber
                                             min={1}
@@ -187,8 +182,7 @@ const ProductModal: FC<ProductModalProps> = ({
                         </Space>
                     )}
                 </Form.List>
-            </Form>
-        </Modal>
+        </CrudModal>
     );
 };
 

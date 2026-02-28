@@ -1,33 +1,18 @@
-import { Table, Button, Popconfirm, Tag, Space, Typography, Flex } from "antd";
-import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Table, Tag, Space, Typography } from "antd";
 import { useProducts } from "./hooks/useProducts";
 import ProductModal from "./components/ProductModal";
 import type { Product } from "../../types";
+import { EntityListHeader, buildIdColumn, buildActionColumn } from "../../../../components/_ui";
+import { formatCurrency } from "../../../../app/utils/formatters";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
-const formatCurrency = (value: number) => {
-    if (isNaN(value)) return value;
-
-    return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-}
-    
 
 const columns = (
     onEdit: (r: Product) => void,
     onDelete: (id: number) => void,
 ) => [
-    {
-        title: "ID",
-        dataIndex: "id",
-        key: "id",
-        width: 150,
-        render: (id: number) => (
-            <Tag color="geekblue">
-                <Text code>{id}</Text>
-            </Tag>
-        ),
-    },
+    buildIdColumn<Product>(),
     {
         title: "Nome do Produto",
         dataIndex: "name",
@@ -37,7 +22,7 @@ const columns = (
         title: "Valor Unitário",
         dataIndex: "value",
         key: "value",
-        width: 160,
+        width: 130,
         align: "right" as const,
         render: (value: number) => (
             <Text strong style={{ color: "#16a34a" }}>
@@ -57,36 +42,7 @@ const columns = (
             </Tag>
         ),
     },
-    {
-        title: "Ações",
-        key: "actions",
-        width: 100,
-        align: "center" as const,
-        render: (_: unknown, record: Product) => (
-            <Space size="small">
-                <Button
-                    type="text"
-                    icon={<EditOutlined />}
-                    size="small"
-                    onClick={() => onEdit(record)}
-                />
-                <Popconfirm
-                    title="Excluir produto"
-                    description="Tem certeza que deseja excluir este produto?"
-                    onConfirm={() => onDelete(record.id)}
-                    okText="Sim"
-                    cancelText="Não"
-                >
-                    <Button
-                        type="text"
-                        danger
-                        icon={<DeleteOutlined />}
-                        size="small"
-                    />
-                </Popconfirm>
-            </Space>
-        ),
-    },
+    buildActionColumn<Product>({ onEdit, onDelete, deleteLabel: "produto" }),
 ];
 
 const ProductsList = () => {
@@ -113,27 +69,17 @@ const ProductsList = () => {
     } = useProducts();
 
     return (
-        <Space orientation="vertical" size="middle" style={{ display: "flex" }}>
-            <Flex justify="space-between" align="center">
-                <Space orientation="vertical" size={0}>
-                    <Title level={4} style={{ margin: 0 }}>
-                        Produtos
-                    </Title>
-                    <Text type="secondary">
-                        {products?.totalItems ?? 0}{" "}
-                        {products?.totalItems === 1
-                            ? "produto cadastrado"
-                            : "produtos cadastrados"}
-                    </Text>
-                </Space>
-                <Button
-                    type="primary"
-                    icon={<PlusOutlined />}
-                    onClick={openCreateModal}
-                >
-                    Novo Produto
-                </Button>
-            </Flex>
+        <Space direction="vertical" size="middle" style={{ display: "flex" }}>
+            <EntityListHeader
+                title="Produtos"
+                subtitle={`${products?.totalItems ?? 0} ${
+                    products?.totalItems === 1
+                        ? "produto cadastrado"
+                        : "produtos cadastrados"
+                }`}
+                addLabel="Novo Produto"
+                onAdd={openCreateModal}
+            />
 
             <Table
                 dataSource={products?.data || []}
@@ -154,7 +100,7 @@ const ProductsList = () => {
                         setItemsPerPage(pageSize);
                     },
                 }}
-                scroll={{ x: 600 }}
+                scroll={{ x: 700 }}
             />
 
             <ProductModal

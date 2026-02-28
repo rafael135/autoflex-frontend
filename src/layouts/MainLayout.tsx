@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Layout, Menu, Button, Drawer, Typography } from "antd";
+import { Layout, Menu, Button, Drawer, Typography, Grid } from "antd";
 import {
     DatabaseOutlined,
     ShoppingOutlined,
@@ -13,6 +13,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 
 const { Sider, Content, Header } = Layout;
 const { Title, Text } = Typography;
+const { useBreakpoint } = Grid;
 
 type ActiveView = "products" | "rawMaterials" | "production";
 
@@ -34,6 +35,9 @@ export default function Dashboard() {
     const [activeView, setActiveView] = useState<ActiveView>("products");
     const [siderCollapsed, setSiderCollapsed] = useState(false);
     const [drawerOpen, setDrawerOpen] = useState(false);
+
+    const screens = useBreakpoint();
+    const isMobileLayout = !screens.md;
 
     const navigate = useNavigate();
 
@@ -94,9 +98,8 @@ export default function Dashboard() {
                 onCollapse={setSiderCollapsed}
                 trigger={null}
                 width={220}
-                collapsedWidth={64}
-                breakpoint="md"
                 collapsedWidth={0}
+                breakpoint="md"
                 onBreakpoint={(broken) => setSiderCollapsed(broken)}
                 style={{ background: SIDEBAR_BG }}
             >
@@ -109,7 +112,7 @@ export default function Dashboard() {
                 open={drawerOpen}
                 onClose={() => setDrawerOpen(false)}
                 placement="left"
-                size={220}
+                width={220}
                 styles={{
                     body: { padding: 0, background: SIDEBAR_BG },
                     header: { display: "none" },
@@ -144,25 +147,27 @@ export default function Dashboard() {
                         }}
                     >
                         {/* Mobile hamburger */}
-                        <Button
-                            type="text"
-                            icon={<MenuOutlined />}
-                            onClick={() => setDrawerOpen(true)}
-                            style={{ display: "none" }}
-                            className="mobile-menu-btn"
-                        />
+                        {isMobileLayout && (
+                            <Button
+                                type="text"
+                                icon={<MenuOutlined />}
+                                onClick={() => setDrawerOpen(true)}
+                            />
+                        )}
                         {/* Desktop collapse */}
-                        <Button
-                            type="text"
-                            icon={
-                                siderCollapsed ? (
-                                    <MenuUnfoldOutlined />
-                                ) : (
-                                    <MenuFoldOutlined />
-                                )
-                            }
-                            onClick={() => setSiderCollapsed((v) => !v)}
-                        />
+                        {!isMobileLayout && (
+                            <Button
+                                type="text"
+                                icon={
+                                    siderCollapsed ? (
+                                        <MenuUnfoldOutlined />
+                                    ) : (
+                                        <MenuFoldOutlined />
+                                    )
+                                }
+                                onClick={() => setSiderCollapsed((v) => !v)}
+                            />
+                        )}
                         <Title level={5} style={{ margin: 0 }}>
                             {VIEW_TITLES[activeView]}
                         </Title>
@@ -172,7 +177,7 @@ export default function Dashboard() {
                 <Content
                     style={{
                         background: "#f0f4f9",
-                        padding: 24,
+                        padding: isMobileLayout ? "12px 8px" : 24,
                         minHeight: "calc(100vh - 56px)",
                     }}
                 >

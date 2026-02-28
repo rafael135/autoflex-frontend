@@ -1,7 +1,8 @@
-import { Modal, Form, Input, InputNumber } from "antd";
+import { Form, Input, InputNumber } from "antd";
 import type { FormInstance } from "antd";
 import type { RawMaterial } from "../../../../types";
 import type { FC } from "react";
+import { CrudModal } from "../../../../../../components/_ui";
 
 interface RawMaterialModalProps {
     open: boolean;
@@ -19,20 +20,15 @@ const RawMaterialModal: FC<RawMaterialModalProps> = ({
     onCancel,
 }) => {
     return (
-        <Modal
-            title={editingRawMaterial ? "Editar Insumo" : "Novo Insumo"}
+        <CrudModal
             open={open}
+            editing={!!editingRawMaterial}
+            entityName="Insumo"
+            form={form}
             onOk={onOk}
             onCancel={onCancel}
-            okText={editingRawMaterial ? "Salvar" : "Cadastrar"}
-            cancelText="Cancelar"
             width={480}
-            afterOpenChange={(visible) => {
-                if (!visible) form.resetFields();
-            }}
-            destroyOnHidden
         >
-            <Form form={form} layout="vertical" style={{ marginTop: 16 }}>
                 <Form.Item
                     name="name"
                     label="Nome do Insumo"
@@ -59,8 +55,7 @@ const RawMaterialModal: FC<RawMaterialModalProps> = ({
                         placeholder="0"
                     />
                 </Form.Item>
-            </Form>
-        </Modal>
+        </CrudModal>
     );
 };
 

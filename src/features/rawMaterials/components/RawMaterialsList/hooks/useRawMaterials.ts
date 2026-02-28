@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Form } from "antd";
 import type { RawMaterial } from "../../../types";
 import {
@@ -16,6 +16,7 @@ export const useRawMaterials = () => {
         data: rawMaterialsResponse,
         isLoading: isLoadingGetRawMaterials,
         isError: isErrorGetRawMaterials,
+        refetch: refetchRawMaterials,
     } = useGetRawMaterialsQuery({ page: currentPage, itemsPerPage });
 
     const [createRawMaterial, { isLoading: isLoadingCreate }] =
@@ -109,6 +110,10 @@ export const useRawMaterials = () => {
         (id: number) => onDelete(id),
         [onDelete],
     );
+
+    useEffect(() => {
+        refetchRawMaterials();
+    }, [refetchRawMaterials]);
 
     return {
         form,

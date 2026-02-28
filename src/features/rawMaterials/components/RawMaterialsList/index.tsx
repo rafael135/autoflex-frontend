@@ -1,26 +1,16 @@
-import { Table, Button, Popconfirm, Tag, Space, Typography, Flex } from "antd";
-import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Table, Space, Typography } from "antd";
 import { useRawMaterials } from "./hooks/useRawMaterials";
 import RawMaterialModal from "./components/RawMaterialModal";
 import type { RawMaterial } from "../../types";
+import { EntityListHeader, buildIdColumn, buildActionColumn } from "../../../../components/_ui";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 const columns = (
     onEdit: (r: RawMaterial) => void,
     onDelete: (id: number) => void,
 ) => [
-    {
-        title: "ID",
-        dataIndex: "id",
-        key: "id",
-        width: 150,
-        render: (id: number) => (
-            <Tag color="geekblue">
-                <Text code>{id}</Text>
-            </Tag>
-        ),
-    },
+    buildIdColumn<RawMaterial>(),
     {
         title: "Nome do Insumo",
         dataIndex: "name",
@@ -38,36 +28,7 @@ const columns = (
             </Text>
         ),
     },
-    {
-        title: "Ações",
-        key: "actions",
-        width: 100,
-        align: "center" as const,
-        render: (_: unknown, record: RawMaterial) => (
-            <Space size="small">
-                <Button
-                    type="text"
-                    icon={<EditOutlined />}
-                    size="small"
-                    onClick={() => onEdit(record)}
-                />
-                <Popconfirm
-                    title="Excluir insumo"
-                    description="Tem certeza que deseja excluir este insumo?"
-                    onConfirm={() => onDelete(record.id)}
-                    okText="Sim"
-                    cancelText="Não"
-                >
-                    <Button
-                        type="text"
-                        danger
-                        icon={<DeleteOutlined />}
-                        size="small"
-                    />
-                </Popconfirm>
-            </Space>
-        ),
-    },
+    buildActionColumn<RawMaterial>({ onEdit, onDelete, deleteLabel: "insumo" }),
 ];
 
 const RawMaterialsList = () => {
@@ -90,26 +51,16 @@ const RawMaterialsList = () => {
 
     return (
         <Space direction="vertical" size="middle" style={{ display: "flex" }}>
-            <Flex justify="space-between" align="center">
-                <Space direction="vertical" size={0}>
-                    <Title level={4} style={{ margin: 0 }}>
-                        Insumos
-                    </Title>
-                    <Text type="secondary">
-                        {rawMaterials?.totalItems ?? 0}{" "}
-                        {rawMaterials?.totalItems === 1
-                            ? "insumo cadastrado"
-                            : "insumos cadastrados"}
-                    </Text>
-                </Space>
-                <Button
-                    type="primary"
-                    icon={<PlusOutlined />}
-                    onClick={openCreateModal}
-                >
-                    Novo Insumo
-                </Button>
-            </Flex>
+            <EntityListHeader
+                title="Insumos"
+                subtitle={`${rawMaterials?.totalItems ?? 0} ${
+                    rawMaterials?.totalItems === 1
+                        ? "insumo cadastrado"
+                        : "insumos cadastrados"
+                }`}
+                addLabel="Novo Insumo"
+                onAdd={openCreateModal}
+            />
 
             <Table
                 dataSource={rawMaterials?.data || []}

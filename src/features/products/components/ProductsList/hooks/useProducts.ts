@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { Form } from "antd";
 import type { Product } from "../../../types";
 import {
@@ -23,6 +23,7 @@ export const useProducts = () => {
         data: productsResponse,
         isLoading: isLoadingGetProducts,
         isError: isErrorGetProducts,
+        refetch: refetchProducts,
     } = useGetProductsQuery({ page: currentPage, itemsPerPage });
 
     const [triggerGetRawMaterials, { isFetching: isLoadingRawMaterials }] =
@@ -204,6 +205,10 @@ export const useProducts = () => {
     }, [form, editingProduct, rawMaterialOptions, onAdd, onEdit, closeModal]);
 
     const handleDelete = useCallback((id: number) => onDelete(id), [onDelete]);
+
+    useEffect(() => {
+        refetchProducts();
+    }, [refetchProducts]);
 
     return {
         form,
