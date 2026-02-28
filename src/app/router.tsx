@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../layouts/MainLayout";
 import { ProductsRoutes } from "../features/products";
 import { RawMaterialsRoutes } from "../features/rawMaterials";
-
+import { ProductionRoutes } from "../features/production";
 
 export const router = createBrowserRouter([
     {
@@ -18,6 +18,9 @@ export const router = createBrowserRouter([
                 path: "rawMaterials/*",
                 element: <RawMaterialsRoutes />
             },
+            {
+                path: "production/*",
+                element: <ProductionRoutes />
             }
         ]
     }
