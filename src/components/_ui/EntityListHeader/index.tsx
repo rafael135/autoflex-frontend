@@ -13,7 +13,7 @@ interface EntityListHeaderProps {
 }
 
 const EntityListHeader = ({ title, subtitle, addLabel, onAdd, addButtonTestId = 'add-button' }: EntityListHeaderProps) => (
-    <Flex justify="space-between" align="center" wrap="wrap" gap={[8, 8]}>
+    <Flex justify="space-between" align="center" wrap="wrap" gap={"8px"}>
         <Space direction="vertical" size={0}>
             <Title level={4} style={{ margin: 0 }}>
                 {title}
