@@ -1,0 +1,24 @@
+{
+  "currentPage": 1,
+  "totalItems": 2,
+  "totalPages": 1,
+  "data": [
+    {
+      "id": 1,
+      "name": "Quadro Elétrico Industrial",
+      "value": 450.00,
+      "materials": [
+        { "rawMaterialId": 1, "name": "Chapa de Aço 2mm", "quantity": 3 },
+        { "rawMaterialId": 3, "name": "Cabo de Cobre 10mm²", "quantity": 5 }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Painel de Comando",
+      "value": 320.00,
+      "materials": [
+        { "rawMaterialId": 2, "name": "Parafuso M8 x 25mm", "quantity": 20 }
+      ]
+    }
+  ]
+}

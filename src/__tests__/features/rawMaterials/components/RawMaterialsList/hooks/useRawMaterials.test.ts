@@ -1,6 +1,21 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 
+// Provide a real message context so App.useApp() works without an <AntApp> provider
+vi.mock('antd', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('antd')>()
+  return {
+    ...actual,
+    App: {
+      ...actual.App,
+      useApp: () => ({
+        message: { success: vi.fn(), error: vi.fn(), warning: vi.fn(), info: vi.fn() },
+        modal: {},
+        notification: {},
+      }),
+    },
+  }
+})
 // ---- Mock RTK Query hooks ----
 const mockRefetch = vi.fn()
 const mockCreateRawMaterial = vi.fn().mockResolvedValue({})

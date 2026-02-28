@@ -2,6 +2,7 @@ import React from 'react'
 import { configureStore } from '@reduxjs/toolkit'
 import { Provider } from 'react-redux'
 import { render, type RenderOptions } from '@testing-library/react'
+import { App as AntApp } from 'antd'
 import { baseApi } from '../app/api/baseApi'
 
 const makeStore = () => {
@@ -22,7 +23,11 @@ export const renderWithProviders = (
   { store = makeStore(), ...renderOptions }: RenderWithProvidersOptions = {},
 ) => {
   const Wrapper = ({ children }: { children: React.ReactNode }) => {
-    return <Provider store={store}>{children}</Provider>
+    return (
+      <Provider store={store}>
+        <AntApp>{children}</AntApp>
+      </Provider>
+    )
   }
   return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) }
 }

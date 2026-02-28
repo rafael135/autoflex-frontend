@@ -13,19 +13,13 @@ vi.mock('antd', async (importOriginal) => {
     afterOpenChange,
     open,
     children,
-    onOk,
-    onCancel,
-    okText,
-    cancelText,
+    footer,
     title,
   }: {
     afterOpenChange?: (open: boolean) => void
     open?: boolean
     children?: React.ReactNode
-    onOk?: () => void
-    onCancel?: () => void
-    okText?: React.ReactNode
-    cancelText?: React.ReactNode
+    footer?: React.ReactNode
     title?: React.ReactNode
   }) => {
     React.useEffect(() => {
@@ -36,8 +30,7 @@ vi.mock('antd', async (importOriginal) => {
       <div role="dialog" aria-label={String(title ?? '')}>
         <span>{title}</span>
         {children}
-        <button onClick={onOk}>{okText ?? 'OK'}</button>
-        <button onClick={onCancel}>{cancelText ?? 'Cancel'}</button>
+        {footer}
       </div>
     )
   }
