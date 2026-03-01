@@ -48,20 +48,20 @@ describe("Production Simulator", () => {
     // =========================================================================
     // Statistics cards
     // =========================================================================
-    describe("Cards de Estatísticas", () => {
-        it("exibe o card de Valor Total de Produção", () => {
+    describe("Statistics Cards", () => {
+        it("shows the Total Production Value card", () => {
             cy.get("[data-testid='statistic-total-value']").should("be.visible");
         });
 
-        it("exibe o card de Produtos Simulados", () => {
+        it("shows the Simulated Products card", () => {
             cy.get("[data-testid='statistic-products-count']").should("be.visible");
         });
 
-        it("exibe o card de Maior Capacidade", () => {
+        it("shows the Maximum Capacity card", () => {
             cy.get("[data-testid='statistic-max-capacity']").should("be.visible");
         });
 
-        it("exibe valores não zero quando há produtos com estoque suficiente", () => {
+        it("shows non-zero values when there are products with sufficient stock", () => {
             if (Cypress.env("useMocks")) {
                 // Fixture has totalProductionValue = 2700
                 cy.get("[data-testid='statistic-total-value']").should("contain.text", "2.700");
@@ -83,12 +83,12 @@ describe("Production Simulator", () => {
     // =========================================================================
     // Table
     // =========================================================================
-    describe("Tabela de Simulação", () => {
-        it("exibe a tabela de produção", () => {
+    describe("Simulation Table", () => {
+        it("shows the production table", () => {
             cy.get("[data-testid='production-table']").should("be.visible");
         });
 
-        it("exibe produtos com capacidade e valor total", () => {
+        it("shows products with capacity and total value", () => {
             if (Cypress.env("useMocks")) {
                 cy.get("[data-testid='production-table']").contains("Quadro Elétrico Industrial");
                 cy.get("[data-testid='production-table']").contains("4");
@@ -98,7 +98,7 @@ describe("Production Simulator", () => {
             cy.get("[data-testid='production-table']").contains("[E2E] Produto Producao");
         });
 
-        it("exibe estado vazio sem produtos simuláveis (mock)", () => {
+        it("shows empty state when no products are simulable (mock)", () => {
             if (!Cypress.env("useMocks")) return;
             cy.interceptGetProduction("production-empty.json");
             cy.visit("/production");
@@ -109,8 +109,8 @@ describe("Production Simulator", () => {
     // =========================================================================
     // Error state (mock only)
     // =========================================================================
-    describe("Tratamento de Erros", () => {
-        it("exibe error alert quando a API retorna erro (mock)", () => {
+    describe("Error Handling", () => {
+        it("shows error alert when the API returns an error (mock)", () => {
             if (!Cypress.env("useMocks")) return;
             cy.intercept("GET", "**/production", { statusCode: 500, body: {} }).as("getProductionError");
             cy.visit("/production");

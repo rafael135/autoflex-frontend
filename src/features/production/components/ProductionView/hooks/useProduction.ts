@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useGetProductionCapacityQuery } from "../../../api";
 
 export const useProduction = () => {
-    const { data, isLoading, isError, refetch } =
+    const { data, isLoading, isError, refetch, isFetching } =
         useGetProductionCapacityQuery();
 
     const topProduct = data?.products.length
@@ -17,7 +17,7 @@ export const useProduction = () => {
 
     return {
         data,
-        isLoading,
+        isLoading: isLoading || isFetching,
         isError,
         topProduct,
     };

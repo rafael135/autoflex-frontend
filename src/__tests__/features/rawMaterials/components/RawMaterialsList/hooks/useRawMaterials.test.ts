@@ -26,6 +26,7 @@ vi.mock('../../../../../../features/rawMaterials/api/rawMaterialsApi', () => ({
   useGetRawMaterialsQuery: vi.fn(() => ({
     data: { data: [], totalItems: 0, currentPage: 1, totalPages: 1 },
     isLoading: false,
+    isFetching: false,
     isError: false,
     refetch: mockRefetch,
   })),

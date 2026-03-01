@@ -30,18 +30,18 @@ describe("Products", () => {
     // =========================================================================
     // List
     // =========================================================================
-    describe("Lista de Produtos", () => {
-        it("exibe a tabela de produtos", () => {
+    describe("Products List", () => {
+        it("shows the products table", () => {
             cy.get("[data-testid='products-table']").should("be.visible");
         });
 
-        it("exibe estado vazio quando não há produtos", () => {
+        it("shows empty state when no products are available", () => {
             cy.interceptGetProducts("products-empty.json");
             cy.visit("/products");
             cy.contains("Não há produtos registrados").should("be.visible");
         });
 
-        it("exibe error alert quando a API retorna erro (mock)", () => {
+        it("shows error alert when the API returns an error (mock)", () => {
             if (!Cypress.env("useMocks")) return;
             cy.intercept("GET", "**/products*", { statusCode: 500, body: {} }).as("getProductsError");
             cy.visit("/products");
@@ -52,31 +52,31 @@ describe("Products", () => {
     // =========================================================================
     // Create — without materials
     // =========================================================================
-    describe("Criar Produto sem insumos", () => {
+    describe("Create Product without materials", () => {
         beforeEach(() => {
             cy.interceptCrudProduct();
         });
 
-        it("abre o modal ao clicar em Novo Produto", () => {
+        it("opens the modal when clicking on New Product", () => {
             cy.get("[data-testid='add-product-button']").click();
             cy.get("[data-testid='crud-modal']").should("be.visible");
             cy.contains("Novo Produto").should("be.visible");
         });
 
-        it("fecha o modal ao cancelar", () => {
+        it("closes the modal when canceling", () => {
             cy.get("[data-testid='add-product-button']").click();
             cy.get("[data-testid='modal-cancel-button']").click();
             cy.get("[data-testid='crud-modal']").should("not.exist");
         });
 
-        it("exibe validações ao submeter formulário vazio", () => {
+        it("shows validations when submitting empty form", () => {
             cy.get("[data-testid='add-product-button']").click();
             cy.get("[data-testid='modal-ok-button']").click();
             cy.contains("Informe o nome").should("be.visible");
             cy.contains("Informe o valor unitário").should("be.visible");
         });
 
-        it("cria um produto sem insumos com sucesso", () => {
+        it("creates a product without materials successfully", () => {
             cy.get("[data-testid='add-product-button']").click();
             cy.get("[data-testid='name-input']").type(PRODUCT_NAME);
             cy.get("[data-testid='value-input']").type("250");
@@ -95,12 +95,12 @@ describe("Products", () => {
     // =========================================================================
     // Create — with materials
     // =========================================================================
-    describe("Criar Produto com insumos", () => {
+    describe("Create Product with materials", () => {
         beforeEach(() => {
             cy.interceptCrudProduct();
         });
 
-        it("adiciona e remove insumos no formulário", () => {
+        it("adds and removes materials in the form", () => {
             cy.get("[data-testid='add-product-button']").click();
 
             // Add first material
@@ -116,7 +116,7 @@ describe("Products", () => {
             cy.get("[data-testid='quantity-input-1']").should("not.exist");
         });
 
-        it("cria um produto com insumo usando backend real", () => {
+        it("creates a product with materials using real backend", () => {
             if (Cypress.env("useMocks")) return;
 
             // Create a raw material to associate
@@ -155,12 +155,12 @@ describe("Products", () => {
     // =========================================================================
     // Edit
     // =========================================================================
-    describe("Editar Produto", () => {
+    describe("Edit Product", () => {
         beforeEach(() => {
             cy.interceptCrudProduct();
         });
 
-        it("abre o modal de edição pré-preenchido", () => {
+        it("opens the edit modal pre-filled", () => {
             if (Cypress.env("useMocks")) {
                 cy.get("[data-testid='edit-button']").first().click();
                 cy.get("[data-testid='crud-modal']").should("be.visible");
@@ -181,7 +181,7 @@ describe("Products", () => {
             cy.get("[data-testid='name-input']").should("have.value", PRODUCT_NAME);
         });
 
-        it("edita um produto com sucesso", () => {
+        it("edits a product successfully", () => {
             if (Cypress.env("useMocks")) {
                 cy.get("[data-testid='edit-button']").first().click();
                 cy.get("[data-testid='name-input']").clear().type(PRODUCT_NAME_UPDATED);
@@ -210,12 +210,12 @@ describe("Products", () => {
     // =========================================================================
     // Delete
     // =========================================================================
-    describe("Excluir Produto", () => {
+    describe("Delete Product", () => {
         beforeEach(() => {
             cy.interceptCrudProduct();
         });
 
-        it("cancela exclusão ao clicar em Não", () => {
+        it("cancels deletion when clicking No", () => {
             if (Cypress.env("useMocks")) {
                 cy.get("[data-testid='delete-button']").first().click();
                 cy.contains("Excluir produto").should("be.visible");
@@ -235,7 +235,7 @@ describe("Products", () => {
             cy.contains(PRODUCT_NAME).should("be.visible");
         });
 
-        it("exclui um produto ao confirmar", () => {
+        it("deletes a product when confirming", () => {
             if (Cypress.env("useMocks")) {
                 cy.get("[data-testid='delete-button']").first().click();
                 cy.get(".ant-popconfirm").contains("Sim").click();

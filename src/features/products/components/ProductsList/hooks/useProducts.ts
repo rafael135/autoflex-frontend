@@ -23,6 +23,7 @@ export const useProducts = () => {
     const {
         data: productsResponse,
         isLoading: isLoadingGetProducts,
+        isFetching: isFetchingGetProducts,
         isError: isErrorGetProducts,
         refetch: refetchProducts,
     } = useGetProductsQuery({ page: currentPage, itemsPerPage });
@@ -30,11 +31,15 @@ export const useProducts = () => {
     const [triggerGetRawMaterials, { isFetching: isLoadingRawMaterials }] =
         useLazyGetRawMaterialsQuery();
 
-    const [rawMaterialOptions, setRawMaterialOptions] = useState<RawMaterialOption[]>([]);
+    const [rawMaterialOptions, setRawMaterialOptions] = useState<
+        RawMaterialOption[]
+    >([]);
     const [hasMoreRawMaterials, setHasMoreRawMaterials] = useState(false);
     const rawMaterialsPageRef = useRef(1);
     const rawMaterialsSearchRef = useRef("");
-    const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(
+        null,
+    );
 
     const loadRawMaterials = useCallback(
         async (
@@ -70,7 +75,8 @@ export const useProducts = () => {
 
     const onSearchRawMaterials = useCallback(
         (search: string) => {
-            if (searchDebounceRef.current) clearTimeout(searchDebounceRef.current);
+            if (searchDebounceRef.current)
+                clearTimeout(searchDebounceRef.current);
             searchDebounceRef.current = setTimeout(() => {
                 rawMaterialsSearchRef.current = search;
                 rawMaterialsPageRef.current = 1;
@@ -145,62 +151,83 @@ export const useProducts = () => {
     }, [form]);
 
     const handleSubmit = useCallback(async () => {
-        form.validateFields().then(
-            async (values: { name: string; value: number; materials?: { rawMaterialId: number; quantity: number }[] }) => {
-                const product: Product = {
-                    id: editingProduct ? editingProduct.id : (null as unknown as number),
-                    name: values.name,
-                    value: values.value,
-                    materials: (values.materials ?? [])
-                        .filter((m) => m.rawMaterialId && m.quantity > 0)
-                        .map((m) => ({
-                            rawMaterialId: m.rawMaterialId,
-                            name: rawMaterialOptions.find((o) => o.value === m.rawMaterialId)?.label ?? "",
-                            quantity: m.quantity,
-                        })),
-                };
-                try {
-                    if (editingProduct) {
-                        await updateProduct({
-                            id: product.id,
-                            name: product.name,
-                            value: product.value,
-                            materials: product.materials.map((m) => ({
+        form.validateFields()
+            .then(
+                async (values: {
+                    name: string;
+                    value: number;
+                    materials?: { rawMaterialId: number; quantity: number }[];
+                }) => {
+                    const product: Product = {
+                        id: editingProduct
+                            ? editingProduct.id
+                            : (null as unknown as number),
+                        name: values.name,
+                        value: values.value,
+                        materials: (values.materials ?? [])
+                            .filter((m) => m.rawMaterialId && m.quantity > 0)
+                            .map((m) => ({
                                 rawMaterialId: m.rawMaterialId,
+                                name:
+                                    rawMaterialOptions.find(
+                                        (o) => o.value === m.rawMaterialId,
+                                    )?.label ?? "",
                                 quantity: m.quantity,
                             })),
-                        }).unwrap();
-                        message.success("Produto atualizado com sucesso!");
-                    } else {
-                        await createProduct({
-                            name: product.name,
-                            value: product.value,
-                            materials: product.materials.map((m) => ({
-                                rawMaterialId: m.rawMaterialId,
-                                quantity: m.quantity,
-                            })),
-                        }).unwrap();
-                        message.success("Produto cadastrado com sucesso!");
+                    };
+                    try {
+                        if (editingProduct) {
+                            await updateProduct({
+                                id: product.id,
+                                name: product.name,
+                                value: product.value,
+                                materials: product.materials.map((m) => ({
+                                    rawMaterialId: m.rawMaterialId,
+                                    quantity: m.quantity,
+                                })),
+                            }).unwrap();
+                            message.success("Produto atualizado com sucesso!");
+                        } else {
+                            await createProduct({
+                                name: product.name,
+                                value: product.value,
+                                materials: product.materials.map((m) => ({
+                                    rawMaterialId: m.rawMaterialId,
+                                    quantity: m.quantity,
+                                })),
+                            }).unwrap();
+                            message.success("Produto cadastrado com sucesso!");
+                        }
+                        closeModal();
+                    } catch {
+                        // isErrorCreateProduct / isErrorUpdateProduct drive the ErrorAlert in the UI
                     }
-                    closeModal();
-                } catch {
-                    // isErrorCreateProduct / isErrorUpdateProduct drive the ErrorAlert in the UI
-                }
-            },
-        )
-        .catch(() => {
-            // validateFields() rejects when form is invalid — handled by Ant Design inline messages
-        });
-    }, [form, editingProduct, rawMaterialOptions, closeModal, updateProduct, message, createProduct]);
+                },
+            )
+            .catch(() => {
+                // validateFields() rejects when form is invalid — handled by Ant Design inline messages
+            });
+    }, [
+        form,
+        editingProduct,
+        rawMaterialOptions,
+        closeModal,
+        updateProduct,
+        message,
+        createProduct,
+    ]);
 
-    const handleDelete = useCallback(async (id: number) => {
-        try {
-            await deleteProduct(id).unwrap();
-            message.success("Produto excluído com sucesso!");
-        } catch {
-            message.error("Erro ao excluir produto. Tente novamente.");
-        }
-    }, [deleteProduct, message]);
+    const handleDelete = useCallback(
+        async (id: number) => {
+            try {
+                await deleteProduct(id).unwrap();
+                message.success("Produto excluído com sucesso!");
+            } catch {
+                message.error("Erro ao excluir produto. Tente novamente.");
+            }
+        },
+        [deleteProduct, message],
+    );
 
     useEffect(() => {
         refetchProducts();
@@ -216,7 +243,7 @@ export const useProducts = () => {
         handleSubmit,
         handleDelete,
         products: productsResponse,
-        isLoadingGetProducts,
+        isLoadingGetProducts: isLoadingGetProducts || isFetchingGetProducts,
         isErrorGetProducts,
         rawMaterialOptions,
         isLoadingRawMaterials,

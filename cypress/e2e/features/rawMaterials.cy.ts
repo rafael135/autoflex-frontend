@@ -28,18 +28,18 @@ describe("Raw Materials", () => {
     // =========================================================================
     // List
     // =========================================================================
-    describe("Lista de Insumos", () => {
-        it("exibe a tabela de insumos", () => {
+    describe("List Raw Materials", () => {
+        it("shows the raw materials table", () => {
             cy.get("[data-testid='raw-materials-table']").should("be.visible");
         });
 
-        it("exibe estado vazio quando não há insumos", () => {
+        it("shows empty state when no raw materials are available", () => {
             cy.interceptGetRawMaterials("raw-materials-empty.json");
             cy.visit("/rawMaterials");
             cy.contains("Não há insumos registrados").should("be.visible");
         });
 
-        it("exibe error alert quando a API retorna erro (mock)", () => {
+        it("shows error alert when the API returns an error (mock)", () => {
             if (!Cypress.env("useMocks")) return;
             cy.intercept("GET", "**/raw-materials*", { statusCode: 500, body: {} }).as("getRawMaterialsError");
             cy.visit("/rawMaterials");
@@ -50,31 +50,31 @@ describe("Raw Materials", () => {
     // =========================================================================
     // Create
     // =========================================================================
-    describe("Criar Insumo", () => {
+    describe("Create Raw Material", () => {
         beforeEach(() => {
             cy.interceptCrudRawMaterial();
         });
 
-        it("abre o modal ao clicar em Novo Insumo", () => {
+        it("opens the modal when clicking on New Raw Material", () => {
             cy.get("[data-testid='add-raw-material-button']").click();
             cy.get("[data-testid='crud-modal']").should("be.visible");
             cy.contains("Novo Insumo").should("be.visible");
         });
 
-        it("fecha o modal ao cancelar", () => {
+        it("closes the modal when canceling", () => {
             cy.get("[data-testid='add-raw-material-button']").click();
             cy.get("[data-testid='modal-cancel-button']").click();
             cy.get("[data-testid='crud-modal']").should("not.exist");
         });
 
-        it("exibe validações ao submeter formulário vazio", () => {
+        it("shows validations when submitting empty form", () => {
             cy.get("[data-testid='add-raw-material-button']").click();
             cy.get("[data-testid='modal-ok-button']").click();
             cy.contains("Informe o nome").should("be.visible");
             cy.contains("Informe a quantidade").should("be.visible");
         });
 
-        it("cria um insumo com sucesso", () => {
+        it("creates a raw material successfully", () => {
             cy.get("[data-testid='add-raw-material-button']").click();
             cy.get("[data-testid='name-input']").type(RAW_MATERIAL_NAME);
             cy.get("[data-testid='stock-quantity-input']").type("100");
@@ -96,12 +96,12 @@ describe("Raw Materials", () => {
     // =========================================================================
     // Edit
     // =========================================================================
-    describe("Editar Insumo", () => {
+    describe("Edit Raw Material", () => {
         beforeEach(() => {
             cy.interceptCrudRawMaterial();
         });
 
-        it("abre o modal de edição pré-preenchido", () => {
+        it("opens the edit modal pre-filled", () => {
             if (Cypress.env("useMocks")) {
                 // In mock mode just check that the first row edit button works
                 cy.get("[data-testid='edit-button']").first().click();
@@ -124,7 +124,7 @@ describe("Raw Materials", () => {
             cy.get("[data-testid='name-input']").should("have.value", RAW_MATERIAL_NAME);
         });
 
-        it("edita um insumo com sucesso", () => {
+        it("edits a raw material successfully", () => {
             if (Cypress.env("useMocks")) {
                 cy.get("[data-testid='edit-button']").first().click();
                 cy.get("[data-testid='name-input']").clear().type(RAW_MATERIAL_NAME_UPDATED);
@@ -153,12 +153,12 @@ describe("Raw Materials", () => {
     // =========================================================================
     // Delete
     // =========================================================================
-    describe("Excluir Insumo", () => {
+    describe("Delete Raw Material", () => {
         beforeEach(() => {
             cy.interceptCrudRawMaterial();
         });
 
-        it("exibe confirmação de exclusão", () => {
+        it("shows delete confirmation", () => {
             if (Cypress.env("useMocks")) {
                 cy.get("[data-testid='delete-button']").first().click();
                 cy.contains("Excluir insumo").should("be.visible");
@@ -179,7 +179,7 @@ describe("Raw Materials", () => {
             cy.contains(RAW_MATERIAL_NAME).should("be.visible");
         });
 
-        it("exclui um insumo ao confirmar", () => {
+        it("deletes a raw material when confirming", () => {
             if (Cypress.env("useMocks")) {
                 cy.get("[data-testid='delete-button']").first().click();
                 cy.get(".ant-popconfirm").contains("Sim").click();
