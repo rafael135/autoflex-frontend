@@ -14,8 +14,7 @@
     "cy:open": "cypress open",
     "cy:run": "cypress run",
     "cy:dev": "start-server-and-test dev http://localhost:5173 cy:open",
-    "cy:ci": "start-server-and-test dev http://localhost:5173 cy:run",
-    "cy:mock": "cypress open --env useMocks=true"
+    "cy:ci": "start-server-and-test dev http://localhost:5173 cy:run"
   },
   "dependencies": {
     "@ant-design/icons": "^6.1.0",
