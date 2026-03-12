@@ -2,7 +2,7 @@
 
 Front-end do sistema de controle de estoque industrial — cadastro de produtos, matérias-primas e simulador de produção. Desenvolvido como teste técnico para a vaga na **Projedata**.
 
-> O back-end (API REST) está em repositório separado.
+> Backend: [rafael135/autoflex-api](https://github.com/rafael135/autoflex-api)
 
 ---
 
