@@ -9,6 +9,11 @@ Ambas consomem o mesmo backend:
 
 > API: [rafael135/autoflex-api](https://github.com/rafael135/autoflex-api)
 
+## Atalhos rápidos
+
+- [README do React](autoflex-frontend/README.md)
+- [README do Vue](autoflex-vue/README.md)
+
 ---
 
 ## Estrutura
