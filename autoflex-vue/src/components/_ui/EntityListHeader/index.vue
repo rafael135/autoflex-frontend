@@ -1,7 +1,15 @@
 <template>
   <div class="header">
-    <h3>{{ title }}</h3>
-    <Button :label="buttonLabel" icon="pi pi-plus" @click="$emit('add')" />
+    <div class="text-wrap">
+      <h3>{{ title }}</h3>
+      <small v-if="subtitle">{{ subtitle }}</small>
+    </div>
+    <Button
+      :label="buttonLabel"
+      icon="pi pi-plus"
+      :data-testid="addButtonTestId"
+      @click="$emit('add')"
+    />
   </div>
 </template>
 
@@ -11,6 +19,8 @@ import Button from "primevue/button";
 defineProps<{
   title: string;
   buttonLabel?: string;
+  subtitle?: string;
+  addButtonTestId?: string;
 }>();
 
 defineEmits<{
@@ -27,7 +37,16 @@ defineEmits<{
   gap: 8px;
 }
 
+.text-wrap {
+  display: grid;
+  gap: 2px;
+}
+
 h3 {
   margin: 0;
+}
+
+small {
+  color: #6b7280;
 }
 </style>

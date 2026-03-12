@@ -1,0 +1,10 @@
+{
+  "currentPage": 1,
+  "totalItems": 3,
+  "totalPages": 1,
+  "data": [
+    { "id": 1, "name": "Chapa de Aço 2mm", "stockQuantity": 500 },
+    { "id": 2, "name": "Parafuso M8 x 25mm", "stockQuantity": 2000 },
+    { "id": 3, "name": "Cabo de Cobre 10mm²", "stockQuantity": 150 }
+  ]
+}

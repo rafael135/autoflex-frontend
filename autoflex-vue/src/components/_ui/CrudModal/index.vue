@@ -4,13 +4,15 @@
     :header="title"
     modal
     :style="{ width }"
+    :contentStyle="{ overflowY: 'visible' }"
+    data-testid="crud-modal"
     @update:visible="handleVisibleChange"
   >
     <slot />
 
     <template #footer>
-      <Button label="Cancelar" text @click="$emit('cancel')" />
-      <Button :label="saveLabel" :loading="saving" @click="$emit('save')" />
+      <Button data-testid="modal-cancel-button" label="Cancelar" text @click="$emit('cancel')" />
+      <Button data-testid="modal-ok-button" :label="saveLabel" :loading="saving" @click="$emit('save')" />
     </template>
   </Dialog>
 </template>

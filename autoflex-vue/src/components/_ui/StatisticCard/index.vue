@@ -1,5 +1,5 @@
 <template>
-  <Card>
+  <Card :data-testid="testId">
     <template #title>{{ title }}</template>
     <template #content>
       <p class="stat-value">{{ value }}</p>
@@ -15,6 +15,7 @@ defineProps<{
   title: string;
   value: string | number;
   description?: string;
+  testId?: string;
 }>();
 </script>
 

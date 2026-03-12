@@ -1,6 +1,7 @@
 import { createApp } from "vue";
 import PrimeVue from "primevue/config";
 import { createPinia } from "pinia";
+import ToastService from "primevue/toastservice";
 import App from "./App.vue";
 import router from "./app/router";
 import "primevue/resources/themes/lara-light-blue/theme.css";
@@ -13,5 +14,6 @@ const app = createApp(App);
 app.use(createPinia());
 app.use(router);
 app.use(PrimeVue, { ripple: true });
+app.use(ToastService);
 
 app.mount("#app");

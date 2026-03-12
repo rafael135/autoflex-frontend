@@ -1,5 +1,5 @@
 <template>
-  <Message v-if="visible" severity="error" :closable="false">{{ message }}</Message>
+  <Message v-if="visible" data-testid="error-alert" severity="error" :closable="false">{{ message }}</Message>
 </template>
 
 <script setup lang="ts">

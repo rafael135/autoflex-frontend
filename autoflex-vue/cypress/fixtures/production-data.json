@@ -1,0 +1,7 @@
+{
+  "products": [
+    { "id": 1, "name": "Quadro Elétrico Industrial", "maxProductionCapacity": 150, "totalValue": 67500 },
+    { "id": 2, "name": "Painel de Comando", "maxProductionCapacity": 90, "totalValue": 28800 }
+  ],
+  "totalProductionValue": 96300
+}

@@ -3,9 +3,21 @@
     <ErrorAlert :visible="!!errorMessage" :message="errorMessage" />
 
     <div class="stats-grid">
-      <StatisticCard title="Valor Total de Produção" :value="totalProductionValue" />
-      <StatisticCard title="Produtos Simulados" :value="productsCount" />
-      <StatisticCard title="Maior Capacidade" :value="topCapacityLabel" />
+      <StatisticCard
+        test-id="statistic-total-value"
+        title="Valor Total de Produção"
+        :value="totalProductionValue"
+      />
+      <StatisticCard
+        test-id="statistic-products-count"
+        title="Produtos Simulados"
+        :value="productsCount"
+      />
+      <StatisticCard
+        test-id="statistic-max-capacity"
+        title="Maior Capacidade"
+        :value="topCapacityLabel"
+      />
     </div>
 
     <Card>
@@ -14,12 +26,23 @@
         <div v-if="isLoading" class="loading-wrap">
           <ProgressSpinner style="width: 42px; height: 42px" strokeWidth="8" />
         </div>
-        <DataTable v-else :value="tableRows" paginator :rows="10" responsiveLayout="scroll">
+        <DataTable
+          v-else
+          data-testid="production-table"
+          :value="tableRows"
+          paginator
+          :rows="10"
+          emptyMessage="Nenhum produto pode ser produzido com o estoque atual."
+          responsiveLayout="scroll"
+        >
           <Column field="rank" header="#" />
           <Column field="name" header="Produto" />
           <Column field="maxProductionCapacity" header="Capacidade Máxima" />
           <Column field="totalValue" header="Valor Total" />
         </DataTable>
+        <p v-if="!isLoading && tableRows.length === 0" data-testid="production-empty" class="empty-text">
+          Nenhum produto pode ser produzido com o estoque atual.
+        </p>
       </template>
     </Card>
   </div>
@@ -75,6 +98,11 @@ const tableRows = computed(() =>
   min-height: 120px;
   display: grid;
   place-content: center;
+}
+
+.empty-text {
+  margin: 8px 0 0;
+  color: #6b7280;
 }
 
 @media (max-width: 900px) {
